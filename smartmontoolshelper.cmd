@@ -98,6 +98,7 @@ goto :eof
 cls
 echo Error: Administrator rights needed,
 echo Please run this script with administrator rights!
+echo.
 pause
 goto end
 
