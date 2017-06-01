@@ -22,7 +22,6 @@ echo You should have received a copy of the GNU General Public License
 echo along with this program; if not, write to the Free Software
 echo Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 echo.
-title smartmontools helper
 timeout /t 3
 
 :main_menu
