@@ -34,14 +34,14 @@ echo 1. Send command to selected disks(/dev/pdN)
 echo 2. Scan all external disks
 echo.
 echo v. Display smertmontools version
-echo e. Exit
+echo 0. Exit
 echo.
 set /p varTask=Enter the number of the task: 
 echo.
 if "%varTask%" == "1" goto send_selected_menu
 if "%varTask%" == "2" goto scan_usb
 if "%varTask%" == "v" goto disp_version
-if "%varTask%" == "e" goto end
+if "%varTask%" == "0" goto end
 echo Error: Invalid input
 timeout /t 3
 goto main_menu
@@ -63,7 +63,7 @@ echo 3. Display disks S.M.A.R.T. attributes
 echo 4. Display disks temperature
 echo 5. Set standby time and APM
 echo 6. Start extended self-test
-echo r. Return to main menu
+echo 0. Return to main menu
 echo.
 set /p varTask=Enter the number of the task: 
 echo.
@@ -73,7 +73,7 @@ if "%varTask%" == "3" goto disp_disks_attribute
 if "%varTask%" == "4" goto disp_disks_temp
 if "%varTask%" == "5" goto set_disks_standby_apm
 if "%varTask%" == "6" goto send_selftestlong_pd
-if "%varTask%" == "r" goto main_menu
+if "%varTask%" == "0" goto main_menu
 echo Error: Invalid input
 timeout /t 3
 goto send_selected_menu
