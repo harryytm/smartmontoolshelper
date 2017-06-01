@@ -11,7 +11,7 @@ echo.
 echo 1. Send command to selected disks(/dev/pdN)
 echo 2. Scan all external disks
 echo.
-echo v. Display smertmontools version
+echo v. Display smartmontools version
 echo e. Exit
 echo.
 set /p varTask=Enter the number of the task: 
