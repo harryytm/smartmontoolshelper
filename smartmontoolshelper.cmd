@@ -1,9 +1,12 @@
 @echo off
 title smartmontools helper
+rem Check if the script is running with administrator rights
+attrib %windir%\system32 -h | findstr /I "denied" >nul
+if not errorlevel 1 goto admin_needed
 cls
 echo.
 echo smartmontoolshelper
-echo Copyright (C) 2017  Harry Yeung Tim Ming
+echo Copyright (C) 2017 Harry Yeung Tim Ming
 echo.
 echo This program is free software; you can redistribute it and/or
 echo modify it under the terms of the GNU General Public License
@@ -21,7 +24,6 @@ echo Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
 echo.
 title smartmontools helper
 timeout /t 3
-cls
 
 :main_menu
 set varTask=
@@ -72,14 +74,39 @@ if "%varTask%" == "2" goto disp_disks_info
 if "%varTask%" == "3" goto disp_disks_attribute
 if "%varTask%" == "4" goto disp_disks_temp
 if "%varTask%" == "5" goto set_disks_standby_apm
-if "%varTask%" == "6" goto send_selftestlong_pd
+if "%varTask%" == "6" goto send_selftestlong
 if "%varTask%" == "0" goto main_menu
 echo Error: Invalid input
 timeout /t 3
 goto send_selected_menu
 
+rem Messages section
+
+:send_selected_msg
+cls
+echo Sending command to disks /dev/pd%startdev% to /dev/pd%enddev% ...  
+echo.
+goto :EOF
+
+:exec_completed
+rem Section to diplay command completed message and return to main menu
+echo.
+echo Command completed.
+pause
+goto :eof
+
+:admin_needed
+cls
+echo Error: Administrator rights needed,
+echo Please run this script with administrator rights!
+pause
+goto end
+
+rem 
+
 :set_ranges
-echo Please enter the range of disks to select.
+echo Please enter the range of disks to select,
+echo leave empty to use current settings.
 echo.
 set /p startdev=From device: /dev/pd
 set /p enddev=To device: /dev/pd
@@ -88,22 +115,16 @@ goto send_selected_menu
 
 :scan_usb
 cls
-echo Scanning external disks . . .
+echo Scanning external disks ...
 echo.
 smartctl --scan-open -d usb -n standby
 call :exec_completed
 goto main_menu
 
-:send_selected_msg
-cls
-echo Sending command to disks /dev/pd%startdev% to /dev/pd%enddev% . . .
-echo.
-goto :EOF
-
 :disp_disks_info
 call :send_selected_msg
 for /L %%a in (%startdev%,1,%enddev%) do (
-     echo Sending command to /dev/pd%%a...
+     echo Sending command to /dev/pd%%a ...
      echo.
      smartctl /dev/pd%%a -i
      echo.
@@ -114,7 +135,7 @@ goto send_selected_menu
 :disp_disks_attribute
 call :send_selected_msg
 for /L %%a in (%startdev%,1,%enddev%) do (
-     echo Sending command to /dev/pd%%a...
+     echo Sending command to /dev/pd%%a ...
      echo.
      smartctl /dev/pd%%a -Aif brief
      echo.
@@ -125,11 +146,12 @@ goto send_selected_menu
 :disp_disks_temp
 call :send_selected_msg
 for /L %%a in (%startdev%,1,%enddev%) do (
-     echo Sending command to /dev/pd%%a...
+     echo Sending command to /dev/pd%%a ...
      echo.
      smartctl /dev/pd%%a -l scttemp
      echo.
 )
+call :exec_completed
 goto send_selected_menu
 
 :disp_version
@@ -152,16 +174,14 @@ echo APM value: %apm%
 echo Standby after sent command: %standbynow%
 echo.
 set /p current=Use current? 1=yes empty=no: 
-if "%current%" == "1" goto default_standby_apm
-
+if "%current%" == "1" goto current_standby_apm
 echo Please config the setting, leave empty to use current settings.
 echo.
 echo 120=10mins 241=30mins
 set /p standby=Standby (%standby%): 
 set /p apm=APM (%apm%): 
 set /p standbynow=Standby after sent command? 1=yes empty=no: 
-
-:default_standby_apm
+:current_standby_apm
 cls
 echo Will send command to device(s) /dev/pd%startdev% to /dev/pd%enddev%
 echo.
@@ -183,11 +203,14 @@ echo %date% %time%
 call :exec_completed
 goto send_selected_menu
 
-:exec_completed
-rem Section to diplay command completed message and return to main menu
-echo.
-echo Command completed.
-pause
-goto :eof
+:send_selftestlong
+call :send_selected_msg
+for /L %%a in (%startdev%,1,%enddev%) do (
+     echo Sending command to /dev/pd%%a...
+     smartctl /dev/pd%%a -n standby -t long
+     echo.
+)
+call :exec_completed
+goto send_selected_menu
 
 :end
