@@ -1,5 +1,27 @@
 @echo off
 title smartmontools helper
+cls
+echo.
+echo smartmontoolshelper
+echo Copyright (C) 2017  Harry Yeung Tim Ming
+echo.
+echo This program is free software; you can redistribute it and/or
+echo modify it under the terms of the GNU General Public License
+echo as published by the Free Software Foundation; either version 2
+echo of the License, or (at your option) any later version.
+echo.
+echo This program is distributed in the hope that it will be useful,
+echo but WITHOUT ANY WARRANTY; without even the implied warranty of
+echo MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+echo GNU General Public License for more details.
+echo.
+echo You should have received a copy of the GNU General Public License
+echo along with this program; if not, write to the Free Software
+echo Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+echo.
+title smartmontools helper
+timeout /t 3
+cls
 
 :main_menu
 set varTask=
@@ -11,7 +33,7 @@ echo.
 echo 1. Send command to selected disks(/dev/pdN)
 echo 2. Scan all external disks
 echo.
-echo v. Display smartmontools version
+echo v. Display smertmontools version
 echo e. Exit
 echo.
 set /p varTask=Enter the number of the task: 
