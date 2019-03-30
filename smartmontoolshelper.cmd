@@ -126,7 +126,7 @@ call :send_selected_msg
 for /L %%a in (%startdev%,1,%enddev%) do (
      echo Sending command to /dev/pd%%a ...
      echo.
-     smartctl /dev/pd%%a -i
+     smartctl /dev/pd%%a -i | findstr /c:"Device Model:" /c:"Serial Number:"
      echo.
 )
 call :exec_completed
