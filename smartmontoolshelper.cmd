@@ -22,7 +22,7 @@ echo You should have received a copy of the GNU General Public License
 echo along with this program; if not, write to the Free Software
 echo Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 echo.
-timeout /t 3
+timeout /t 1
 
 :main_menu
 set varTask=
@@ -37,14 +37,14 @@ echo.
 echo v. Display smertmontools version
 echo 0. Exit
 echo.
-set /p varTask=Enter the number of the task: 
+set /p varTask=Enter the number of the task:
 echo.
 if "%varTask%" == "1" goto send_selected_menu
 if "%varTask%" == "2" goto scan_usb
 if "%varTask%" == "v" goto disp_version
 if "%varTask%" == "0" goto end
 echo Error: Invalid input
-timeout /t 3
+timeout /t 1
 goto main_menu
 
 :send_selected_menu
@@ -66,7 +66,7 @@ echo 5. Set standby time and APM
 echo 6. Start extended self-test
 echo 0. Return to main menu
 echo.
-set /p varTask=Enter the number of the task: 
+set /p varTask=Enter the number of the task:
 echo.
 if "%varTask%" == "1" goto set_ranges
 if "%varTask%" == "2" goto disp_disks_info
@@ -83,7 +83,7 @@ rem Messages section
 
 :send_selected_msg
 cls
-echo Sending command to disks /dev/pd%startdev% to /dev/pd%enddev% ...  
+echo Sending command to disks /dev/pd%startdev% to /dev/pd%enddev% ...
 echo.
 goto :EOF
 
@@ -92,7 +92,7 @@ rem Section to diplay command completed message and return to main menu
 echo.
 echo Command completed.
 pause
-goto :eof
+goto :EOF
 
 :admin_needed
 cls
@@ -100,9 +100,7 @@ echo Error: Administrator rights needed,
 echo Please run this script with administrator rights!
 echo.
 pause
-goto end
-
-rem 
+goto END
 
 :set_ranges
 echo Please enter the range of disks to select,
@@ -124,9 +122,8 @@ goto main_menu
 :disp_disks_info
 call :send_selected_msg
 for /L %%a in (%startdev%,1,%enddev%) do (
-     echo Sending command to /dev/pd%%a ...
-     echo.
-     smartctl /dev/pd%%a -i
+		 echo Device:           /dev/pd%%a
+     smartctl /dev/pd%%a -i | findstr /c:"Device Model:" /c:"Serial Number:"
      echo.
 )
 call :exec_completed
@@ -173,14 +170,14 @@ echo Standby value: %standby%
 echo APM value: %apm%
 echo Standby after sent command: %standbynow%
 echo.
-set /p current=Use current? 1=yes empty=no: 
+set /p current=Use current? 1=yes empty=no:
 if "%current%" == "1" goto current_standby_apm
 echo Please config the setting, leave empty to use current settings.
 echo.
 echo 120=10mins 241=30mins
-set /p standby=Standby (%standby%): 
-set /p apm=APM (%apm%): 
-set /p standbynow=Standby after sent command? 1=yes empty=no: 
+set /p standby=Standby (%standby%):
+set /p apm=APM (%apm%):
+set /p standbynow=Standby after sent command? 1=yes empty=no:
 :current_standby_apm
 cls
 echo Will send command to device(s) /dev/pd%startdev% to /dev/pd%enddev%
@@ -195,8 +192,8 @@ call :send_selected_msg
 if "%standbynow%" == "1" set standbynowsw= -s standby,now
 for /L %%a in (%startdev%,1,%enddev%) do (
      echo Sending command to /dev/pd%%a ...
-     echo.
-     smartctl /dev/pd%%a -d sat -i -s apm,%apm% -s standby,%standby%%standbynowsw%
+     smartctl /dev/pd%%a -d sat -i -s apm,%apm% -s standby,%standby%%standbynowsw% | findstr /c:"Device Model:" /c:"Serial Number:" /c:"APM set to level" /c:"Standby timer set to"
+		 echo.
 )
 echo.
 echo %date% %time%
@@ -213,4 +210,4 @@ for /L %%a in (%startdev%,1,%enddev%) do (
 call :exec_completed
 goto send_selected_menu
 
-:end
+:END
