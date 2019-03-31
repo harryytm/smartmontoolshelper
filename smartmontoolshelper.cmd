@@ -122,9 +122,7 @@ goto main_menu
 :disp_disks_info
 call :send_selected_msg
 for /L %%a in (%startdev%,1,%enddev%) do (
-     REM echo Sending command to /dev/pd%%a ...
 		 echo Device:           /dev/pd%%a
-     REM echo.
      smartctl /dev/pd%%a -i | findstr /c:"Device Model:" /c:"Serial Number:"
      echo.
 )
@@ -194,7 +192,7 @@ call :send_selected_msg
 if "%standbynow%" == "1" set standbynowsw= -s standby,now
 for /L %%a in (%startdev%,1,%enddev%) do (
      echo Sending command to /dev/pd%%a ...
-     smartctl /dev/pd%%a -d sat -i -s apm,%apm% -s standby,%standby%%standbynowsw% | findstr /c:"Device Model:" /c:"Serial Number:"
+     smartctl /dev/pd%%a -d sat -i -s apm,%apm% -s standby,%standby%%standbynowsw% | findstr /c:"Device Model:" /c:"Serial Number:" /c:"APM set to level" /c:"Standby timer set to"
 )
 echo.
 echo %date% %time%
