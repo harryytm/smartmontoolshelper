@@ -193,6 +193,7 @@ if "%standbynow%" == "1" set standbynowsw= -s standby,now
 for /L %%a in (%startdev%,1,%enddev%) do (
      echo Sending command to /dev/pd%%a ...
      smartctl /dev/pd%%a -d sat -i -s apm,%apm% -s standby,%standby%%standbynowsw% | findstr /c:"Device Model:" /c:"Serial Number:" /c:"APM set to level" /c:"Standby timer set to"
+		 echo.
 )
 echo.
 echo %date% %time%
