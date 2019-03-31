@@ -123,7 +123,7 @@ goto main_menu
 call :send_selected_msg
 for /L %%a in (%startdev%,1,%enddev%) do (
      REM echo Sending command to /dev/pd%%a ...
-		 echo Device:   /dev/pd%%a
+		 echo Device:			/dev/pd%%a
      REM echo.
      smartctl /dev/pd%%a -i | findstr /c:"Device Model:" /c:"Serial Number:"
      echo.
