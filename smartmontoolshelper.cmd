@@ -56,7 +56,7 @@ echo.
 echo Send command to selected disks
 echo ==============================
 echo.
-echo Current selected disks: /dev/pd%startdev% to /dev/pd%enddev%
+echo Current selected disks: Disk %startdev% to Disk %enddev%
 echo.
 echo 1. Change selected disks
 echo 2. Display disks information
@@ -83,7 +83,7 @@ rem Messages section
 
 :send_selected_msg
 cls
-echo Sending command to disks /dev/pd%startdev% to /dev/pd%enddev% ...
+echo Sending command to disks from Disk %startdev% to Disk %enddev% ...
 echo.
 goto :EOF
 
@@ -106,8 +106,8 @@ goto END
 echo Please enter the range of disks to select,
 echo leave empty to use current settings.
 echo.
-set /p startdev=From device: /dev/pd
-set /p enddev=To device: /dev/pd
+set /p startdev=From Disk: 
+set /p enddev=To Disk: 
 echo.
 goto send_selected_menu
 
@@ -122,7 +122,7 @@ goto main_menu
 :disp_disks_info
 call :send_selected_msg
 for /L %%a in (%startdev%,1,%enddev%) do (
-		 echo Device:           /dev/pd%%a
+		 echo Device:           Disk %%a
      smartctl /dev/pd%%a -i | findstr /c:"Device Model:" /c:"Serial Number:"
      echo.
 )
@@ -143,7 +143,7 @@ goto send_selected_menu
 :disp_disks_temp
 call :send_selected_msg
 for /L %%a in (%startdev%,1,%enddev%) do (
-     echo Sending command to /dev/pd%%a ...
+     echo Sending command to Disk %%a...
      echo.
      smartctl /dev/pd%%a -l scttemp
      echo.
@@ -203,7 +203,7 @@ goto send_selected_menu
 :send_selftestlong
 call :send_selected_msg
 for /L %%a in (%startdev%,1,%enddev%) do (
-     echo Sending command to /dev/pd%%a...
+     echo Sending command to Disk %%a...
      smartctl /dev/pd%%a -n standby -t long
      echo.
 )
