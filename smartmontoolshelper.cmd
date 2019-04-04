@@ -191,9 +191,9 @@ echo %date% %time%
 call :send_selected_msg
 if "%standbynow%" == "1" set standbynowsw= -s standby,now
 for /L %%a in (%startdev%,1,%enddev%) do (
-     echo Sending command to /dev/pd%%a ...
-     smartctl /dev/pd%%a -d sat -i -s apm,%apm% -s standby,%standby%%standbynowsw% | findstr /c:"Device Model:" /c:"Serial Number:" /c:"APM set to level" /c:"Standby timer set to"
-		 echo.
+	echo Sending command to /dev/pd%%a ...
+	smartctl /dev/pd%%a -d sat -i -s apm,%apm% -s standby,%standby%%standbynowsw% | findstr /c:"Device Model:" /c:"Serial Number:" /c:"APM set to level" /c:"Standby timer set to"
+	echo.
 )
 echo.
 echo %date% %time%
@@ -203,9 +203,9 @@ goto send_selected_menu
 :send_selftestlong
 call :send_selected_msg
 for /L %%a in (%startdev%,1,%enddev%) do (
-     echo Sending command to Disk %%a...
-     smartctl /dev/pd%%a -n standby -t long
-     echo.
+	echo Sending command to Disk %%a...
+	smartctl /dev/pd%%a -n standby -t long
+	echo.
 )
 call :exec_completed
 goto send_selected_menu
