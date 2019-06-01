@@ -37,7 +37,7 @@ echo.
 echo v. Display smertmontools version
 echo 0. Exit
 echo.
-set /p varTask=Enter the number of the task:
+set /p varTask=Enter the number of the task: 
 echo.
 if "%varTask%" == "1" goto send_selected_menu
 if "%varTask%" == "2" goto scan_usb
@@ -66,7 +66,7 @@ echo 5. Set standby time and APM
 echo 6. Start extended self-test
 echo 0. Return to main menu
 echo.
-set /p varTask=Enter the number of the task:
+set /p varTask=Enter the number of the task: 
 echo.
 if "%varTask%" == "1" goto set_ranges
 if "%varTask%" == "2" goto disp_disks_info
@@ -170,14 +170,14 @@ echo Standby value: %standby%
 echo APM value: %apm%
 echo Standby after sent command: %standbynow%
 echo.
-set /p current=Use current? 1=yes empty=no:
+set /p current=Use current? 1=yes empty=no: 
 if "%current%" == "1" goto current_standby_apm
 echo Please config the setting, leave empty to use current settings.
 echo.
 echo 120=10mins 241=30mins
-set /p standby=Standby (%standby%):
-set /p apm=APM (%apm%):
-set /p standbynow=Standby after sent command? 1=yes empty=no:
+set /p standby=Standby (%standby%): 
+set /p apm=APM (%apm%): 
+set /p standbynow=Standby after sent command? 1=yes empty=no: 
 :current_standby_apm
 cls
 echo Will send command to device(s) /dev/pd%startdev% to /dev/pd%enddev%
@@ -185,7 +185,7 @@ echo.
 echo Standby value: %standby%
 echo APM value: %apm%
 echo Standby after sent command: %standbynow%
-timeout /t 3
+timeout /t 2
 echo.
 echo %date% %time%
 call :send_selected_msg
