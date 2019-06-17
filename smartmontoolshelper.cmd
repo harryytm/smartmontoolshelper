@@ -31,7 +31,7 @@ echo.
 echo Please select tasks to perform
 echo ==============================
 echo.
-echo 1. Send command to selected disks(/dev/pdN)
+echo 1. Send command to selected disks
 echo 2. Scan all external disks
 echo.
 echo v. Display smertmontools version
@@ -134,7 +134,7 @@ goto send_selected_menu
 :disp_disks_attribute
 call :send_selected_msg
 for /L %%a in (%startdev%,1,%enddev%) do (
-     echo Sending command to /dev/pd%%a ...
+     echo Sending command to Disk %%a...
      echo.
      smartctl /dev/pd%%a -Aif brief
      echo.
@@ -145,7 +145,7 @@ goto send_selected_menu
 :disp_disks_selftest
 call :send_selected_msg
 for /L %%a in (%startdev%,1,%enddev%) do (
-     echo Sending command to /dev/pd%%a ...
+     echo Sending command to Disk %%a...
      echo.
      smartctl /dev/pd%%a -l selftest -i
      echo.
@@ -178,7 +178,7 @@ if "%apm%" == "" set apm=191
 
 echo Current settings:
 echo.
-echo Device(s) /dev/pd%startdev% to /dev/pd%enddev%
+echo Disk %startdev% to Disk %enddev%
 echo Standby value: %standby%
 echo APM value: %apm%
 echo Standby after sent command: %standbynow%
@@ -193,7 +193,7 @@ set /p apm=APM (%apm%):
 set /p standbynow=Standby after sent command? 1=yes empty=no: 
 :current_standby_apm
 cls
-echo Will send command to device(s) /dev/pd%startdev% to /dev/pd%enddev%
+echo Will send command to device(s) Disk %startdev% to Disk %enddev%
 echo.
 echo Standby value: %standby%
 echo APM value: %apm%
@@ -204,7 +204,7 @@ echo %date% %time%
 call :send_selected_msg
 if "%standbynow%" == "1" set standbynowsw= -s standby,now
 for /L %%a in (%startdev%,1,%enddev%) do (
-	echo Sending command to /dev/pd%%a ...
+	echo Sending command to Disk %%a...
 	smartctl /dev/pd%%a -d sat -i -s apm,%apm% -s standby,%standby%%standbynowsw% | findstr /c:"Device Model:" /c:"Serial Number:" /c:"APM set to level" /c:"Standby timer set to"
 	echo.
 )
