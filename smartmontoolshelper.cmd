@@ -64,6 +64,7 @@ echo 3. Display disks S.M.A.R.T. attributes
 echo 4. Display disks temperature
 echo 5. Set standby time and APM
 echo 6. Start extended self-test
+echo 7. Display self-test log
 echo 0. Return to main menu
 echo.
 set /p varTask=Enter the number of the task: 
@@ -74,6 +75,7 @@ if "%varTask%" == "3" goto disp_disks_attribute
 if "%varTask%" == "4" goto disp_disks_temp
 if "%varTask%" == "5" goto set_disks_standby_apm
 if "%varTask%" == "6" goto send_selftestlong
+if "%varTask%" == "7" goto disp_disks_selftest
 if "%varTask%" == "0" goto main_menu
 echo Error: Invalid input
 timeout /t 3
@@ -135,6 +137,17 @@ for /L %%a in (%startdev%,1,%enddev%) do (
      echo Sending command to /dev/pd%%a ...
      echo.
      smartctl /dev/pd%%a -Aif brief
+     echo.
+)
+call :exec_completed
+goto send_selected_menu
+
+:disp_disks_selftest
+call :send_selected_msg
+for /L %%a in (%startdev%,1,%enddev%) do (
+     echo Sending command to /dev/pd%%a ...
+     echo.
+     smartctl /dev/pd%%a -l selftest -i
      echo.
 )
 call :exec_completed
