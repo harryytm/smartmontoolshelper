@@ -124,7 +124,7 @@ goto main_menu
 :disp_disks_info
 call :send_selected_msg
 for /L %%a in (%startdev%,1,%enddev%) do (
-		 echo Device:           Disk %%a
+		 echo Disk %%a
      smartctl /dev/pd%%a -i | findstr /c:"Device Model:" /c:"Serial Number:"
      echo.
 )
